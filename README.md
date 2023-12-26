@@ -9,22 +9,44 @@ import scipy.stats as stats
 df = pd.read_pickle('sales_data.pkl')
 
 
+def mean_est_inf(z, std, error):
+    n = (math.pow(z, 2) * math.pow(std, 2)) / math.pow(error, 2)
+    return n
+
+
+def prop_est_inf(z, prior, error):
+    n = (math.pow(z, 2) * prior * (1 - prior)) / math.pow(error, 2)
+    return n
+
+
+def mean_est_fin(z, std, error, pop_size):
+    n = (math.pow(z, 2) * math.pow(std, 2) * int(pop_size)) \
+        / (math.pow(error, 2) * (int(pop_size) - 1) + (math.pow(z, 2) * math.pow(std, 2)))
+    return n
+
+
+def prop_est_fin(z, prior, error, pop_size):
+    n = (math.pow(z, 2) * prior * (1 - prior) * int(pop_size)) \
+        / (math.pow(error, 2) * (int(pop_size) - 1) + math.pow(z, 2) * prior * (1 - prior))
+    return n
+
+
 def sample_size(data, prior, conf, error):
     global n
     alpha = 1 - conf
     z = stats.norm.ppf(1 - alpha / 2)
 
     infinite = input('Input the population state:'
-                                           '\n1) Population is infinite'
-                                           '\n2) Population is finite'
-                                            '\n')
+                     '\n1) Population is infinite'
+                     '\n2) Population is finite'
+                     '\n')
 
     if infinite == '1':
 
         type = input('Input the type of calculation:'
-                                           '\n1) Mean point estimate'
-                                           '\n2) Proportion estimate'
-                                            '\n')
+                     '\n1) Mean point estimate'
+                     '\n2) Proportion estimate'
+                     '\n')
 
         if type == '1':
 
@@ -36,17 +58,18 @@ def sample_size(data, prior, conf, error):
 
             if mode == '1':
                 std = data.std()
-                n = (math.pow(z, 2) * math.pow(std, 2)) / math.pow(error, 2)
+                n = mean_est_inf(z, std, error)
                 print('Sample size based on pop std:', round(n, 2))
 
             elif mode == '2':
-                std = (data.max()-data.min()) / 4
-                n = (math.pow(z, 2) * math.pow(std, 2)) / math.pow(error, 2)
+                std = (data.max() - data.min()) / 4
+                print(std)
+                n = mean_est_inf(z, std, error)
                 print('Sample size based on sample range:', round(n, 2))
 
             elif mode == '3':
                 std = prior
-                n = (math.pow(z, 2) * math.pow(std, 2)) / math.pow(error, 2)
+                n = mean_est_inf(z, std, error)
                 print('Sample size based on prior std:', round(n, 2))
 
         elif type == '2':
@@ -57,11 +80,11 @@ def sample_size(data, prior, conf, error):
                          '\n')
 
             if mode == '1':
-                n = (math.pow(z, 2) * prior * (1 - prior)) / math.pow(error, 2)
+                n = prop_est_inf(z, prior, error)
                 print('Sample size based on prior proportion:', round(n, 2))
 
             elif mode == '2':
-                n = (math.pow(z, 2) * 0.5 * (1 - 0.5)) / math.pow(error, 2)
+                n = prop_est_inf(z, 0.5, error)
                 print('Sample size based on unknown proportion:', round(n, 2))
 
     elif infinite == '2':
@@ -70,9 +93,9 @@ def sample_size(data, prior, conf, error):
                          '\n')
 
         type = input('Input the type of calculation:'
-                                           '\n1) Mean point estimate'
-                                           '\n2) Proportion estimate'
-                                            '\n')
+                     '\n1) Mean point estimate'
+                     '\n2) Proportion estimate'
+                     '\n')
 
         if type == '1':
             mode = input('Input the state of prior knowledge of std:'
@@ -83,17 +106,18 @@ def sample_size(data, prior, conf, error):
 
             if mode == '1':
                 std = data.std()
-                n = (math.pow(z, 2) * math.pow(std, 2) * int(pop_size)) / (math.pow(error, 2) * (int(pop_size)-1) + (math.pow(z, 2) * math.pow(std, 2)))
+                n = mean_est_fin(z, std, error, pop_size)
                 print('Sample size based on pop std:', round(n, 2))
 
             elif mode == '2':
-                std = (data.max()-data.min()) / 4
-                n = (math.pow(z, 2) * math.pow(std, 2) * int(pop_size)) / (math.pow(error, 2) * (int(pop_size)-1) + (math.pow(z, 2) * math.pow(std, 2)))
+                std = (data.max() - data.min()) / 4
+                print(std)
+                n = mean_est_fin(z, std, error, pop_size)
                 print('Sample size based on sample range:', round(n, 2))
 
             elif mode == '3':
                 std = prior
-                n = (math.pow(z, 2) * math.pow(std, 2) * int(pop_size)) / (math.pow(error, 2) * (int(pop_size)-1) + (math.pow(z, 2) * math.pow(std, 2)))
+                n = mean_est_fin(z, std, error, pop_size)
                 print('Sample size based on prior std:', round(n, 2))
 
         elif type == '2':
@@ -104,20 +128,18 @@ def sample_size(data, prior, conf, error):
                          '\n')
 
             if mode == '1':
-                n = (math.pow(z, 2) * prior * (1 - prior) * int(pop_size)) \
-                    / (math.pow(error, 2) * (int(pop_size)-1) + math.pow(z, 2) * prior * (1 - prior))
+                n = prop_est_fin(z, prior, error, pop_size)
                 print('Sample size based on prior proportion:', round(n, 2))
 
             elif mode == '2':
-                n = (math.pow(z, 2) * 0.5 * (1 - 0.5) * int(pop_size)) \
-                    / (math.pow(error, 2) * (int(pop_size)-1) + math.pow(z, 2) * 0.5 * (1 - 0.5))
+                n = prop_est_fin(z, 0.5, error, pop_size)
                 print('Sample size based on unknown proportion:', round(n, 2))
 
     return n
 
-sample_size_p = sample_size(data=df['price'],
-                            prior=0.24,
-                            conf=0.95,
-                            error=0.07)
 
+sample_size = sample_size(data=df['price'].loc[df['price'] != 0],
+                          prior=0.2,
+                          conf=0.95,
+                          error=0.02)
 ```
