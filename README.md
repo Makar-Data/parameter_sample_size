@@ -156,34 +156,4 @@ sample_size = sample_size(data=df['price'].loc[df['price'] != 0],
                           conf=0.95,
                           error=0.02)
 
-
-
-
-# df['event_time'] = pd.to_datetime(df['event_time'])
-# df['hour'] = df['event_time'].dt.strftime('%H')
-# df['date'] = df['event_time'].dt.day
-# df['weekday'] = df['event_time'].dt.day_name()
-#
-# df['weekday'] = pd.Categorical(df['weekday'],
-#                                categories=['Monday','Tuesday',
-#                                            'Wednesday','Thursday',
-#                                            'Friday','Saturday',
-#                                            'Sunday'], ordered=True)
-#
-# calendar = df.groupby('date', as_index=False).agg(count=('user_id', 'count'))
-# weekdays = df.groupby('weekday', as_index=False).agg(count=('user_id', 'count'))
-# clock = df.groupby('hour', as_index=False).agg(count=('user_id', 'count'))
-#
-# # Визуализация
-# plt.style.use('seaborn')
-#
-# fig, ax = plt.subplots()
-# bars = ax.bar(calendar['date'], calendar['count'], alpha=0.8)
-#
-# fig.suptitle('Time Distribution')
-# ax.set_ylabel('Users')
-#
-# plt.tight_layout()
-# plt.show()
-
 ```
