@@ -1,5 +1,5 @@
 # Sample Size Calculation Based on Parameters
-A simple interactive code for the most basic formulas on sample size calculation. Without any power analysis, only based on parameters.
+A simple code for the most basic formulas for sample size calculation. Only sample sizes for parameters without power analysis.
 
 Variables:
 
