@@ -9,51 +9,59 @@ import scipy.stats as stats
 df = pd.read_pickle('sales_data.pkl')
 
 
-def mean_est_inf(z, std, error):
+# Formula based on mean estimate in infinite population
+def mean_est_inf(z, std, error): 
     n = (math.pow(z, 2) * math.pow(std, 2)) / math.pow(error, 2)
     return n
 
 
+# Formula based on proportion esitmate in infinite population
 def prop_est_inf(z, prior, error):
     n = (math.pow(z, 2) * prior * (1 - prior)) / math.pow(error, 2)
     return n
 
 
+# Formula based on mean estimate in finite population
 def mean_est_fin(z, std, error, pop_size):
     n = (math.pow(z, 2) * math.pow(std, 2) * int(pop_size)) \
         / (math.pow(error, 2) * (int(pop_size) - 1) + (math.pow(z, 2) * math.pow(std, 2)))
     return n
 
 
+# Formula based on proportion esitmate in finite population
 def prop_est_fin(z, prior, error, pop_size):
     n = (math.pow(z, 2) * prior * (1 - prior) * int(pop_size)) \
         / (math.pow(error, 2) * (int(pop_size) - 1) + math.pow(z, 2) * prior * (1 - prior))
     return n
 
 
+# Main sample size calculation function
 def sample_size(data, prior, conf, error):
     global n
     alpha = 1 - conf
     z = stats.norm.ppf(1 - alpha / 2)
-
+    
+    # Node 1 - determination of what formula to apply based on the infinite/finite nature of the population
     infinite = input('Input the population state:'
                      '\n1) Population is infinite'
                      '\n2) Population is finite'
                      '\n')
-
+    
     if infinite == '1':
-
+        
+        # Node 2 - determination of what formula to apply based on mean/proportion target estimation
         type = input('Input the type of calculation:'
                      '\n1) Mean point estimate'
                      '\n2) Proportion estimate'
                      '\n')
 
         if type == '1':
-
+            
+            # Node 3 - determination of what formula to apply based on population parameter
             mode = input('Input the state of prior knowledge of std:'
-                         '\n1) Data is pop'
-                         '\n2) Data is sample, estimate std based on its range'
-                         '\n3) Prior std inputted'
+                         '\n1) Data is pop'  # Data inserted into the function is itself the population
+                         '\n2) Data is sample, estimate std based on its range'  # Std estimation based on sample range
+                         '\n3) Prior std inputted'  # Population std is inserted into the function as 'prior'
                          '\n')
 
             if mode == '1':
@@ -74,6 +82,7 @@ def sample_size(data, prior, conf, error):
 
         elif type == '2':
 
+            # Node 3 - determination of what formula to apply based on population parameter
             mode = input('Input the state of prior knowledge of proportions:'
                          '\n1) Proportion is inputted'
                          '\n2) Proportion is not known'
@@ -92,16 +101,19 @@ def sample_size(data, prior, conf, error):
         pop_size = input('Input the pop size:'
                          '\n')
 
+        # Node 2 - determination of what formula to apply based on mean/proportion target estimation
         type = input('Input the type of calculation:'
                      '\n1) Mean point estimate'
                      '\n2) Proportion estimate'
                      '\n')
 
         if type == '1':
+            
+            # Node 3 - determination of what formula to apply based on population parameter
             mode = input('Input the state of prior knowledge of std:'
-                         '\n1) Data is pop'
-                         '\n2) Data is sample, estimate std based on its range'
-                         '\n3) Prior std inputted'
+                         '\n1) Data is pop'  # Data inserted into the function is itself the population
+                         '\n2) Data is sample, estimate std based on its range'  # Std estimation based on sample range
+                         '\n3) Prior std inputted'  # Population std is inserted into the function as 'prior'
                          '\n')
 
             if mode == '1':
@@ -122,6 +134,7 @@ def sample_size(data, prior, conf, error):
 
         elif type == '2':
 
+            # Node 3 - determination of what formula to apply based on population parameter
             mode = input('Input the state of prior knowledge of proportions:'
                          '\n1) Proportion is inputted'
                          '\n2) Proportion is not known'
@@ -142,4 +155,35 @@ sample_size = sample_size(data=df['price'].loc[df['price'] != 0],
                           prior=0.2,
                           conf=0.95,
                           error=0.02)
+
+
+
+
+# df['event_time'] = pd.to_datetime(df['event_time'])
+# df['hour'] = df['event_time'].dt.strftime('%H')
+# df['date'] = df['event_time'].dt.day
+# df['weekday'] = df['event_time'].dt.day_name()
+#
+# df['weekday'] = pd.Categorical(df['weekday'],
+#                                categories=['Monday','Tuesday',
+#                                            'Wednesday','Thursday',
+#                                            'Friday','Saturday',
+#                                            'Sunday'], ordered=True)
+#
+# calendar = df.groupby('date', as_index=False).agg(count=('user_id', 'count'))
+# weekdays = df.groupby('weekday', as_index=False).agg(count=('user_id', 'count'))
+# clock = df.groupby('hour', as_index=False).agg(count=('user_id', 'count'))
+#
+# # Визуализация
+# plt.style.use('seaborn')
+#
+# fig, ax = plt.subplots()
+# bars = ax.bar(calendar['date'], calendar['count'], alpha=0.8)
+#
+# fig.suptitle('Time Distribution')
+# ax.set_ylabel('Users')
+#
+# plt.tight_layout()
+# plt.show()
+
 ```
