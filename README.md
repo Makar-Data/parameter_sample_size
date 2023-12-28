@@ -158,7 +158,7 @@ def sample_size(data, prior, conf, error):
     return n
 
 
-sample_size = sample_size(data=df['price'].loc[df['price'] != 0],
+sample_size = sample_size(data=df[column],
                           prior=0.2,
                           conf=0.95,
                           error=0.02)
