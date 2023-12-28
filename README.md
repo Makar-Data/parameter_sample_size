@@ -1,5 +1,5 @@
 # Sample Size Calculation Based on Parameters
-A simple code for the most basic formulas for sample size calculation. Only sample sizes for parameters without power analysis.
+A simple code for the most basic formulas for sample size calculation. Only sample sizes for parameter point estimates without hypothesis testing and power analysis.
 
 Variables:
 - Data - the data itself. Only used to calculate standard deviation when the population standard deviation is unknown
