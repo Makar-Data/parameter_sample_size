@@ -2,14 +2,10 @@
 A simple code for the most basic formulas for sample size calculation. Only sample sizes for parameters without power analysis.
 
 Variables:
-
-Data - the data itself. Only used to calculate standard deviation
-
-Prior - prior knowledge of the population standard deviation or proportion
-
-Conf - confidence level
-
-Error - margin of error
+- Data - the data itself. Only used to calculate standard deviation
+- Prior - prior knowledge of the population standard deviation or proportion
+- Conf - confidence level
+- Error - margin of error
 
 
 ```Python
