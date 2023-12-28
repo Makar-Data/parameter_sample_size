@@ -13,9 +13,6 @@ import math
 import pandas as pd
 import scipy.stats as stats
 
-df = pd.read_pickle('sales_data.pkl')
-
-
 # Formula based on mean estimate in infinite population
 def mean_est_inf(z, std, error): 
     n = (math.pow(z, 2) * math.pow(std, 2)) / math.pow(error, 2)
